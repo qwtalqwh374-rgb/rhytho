@@ -303,6 +303,15 @@
         .footer-info {
             font-size: 12px;
             color: var(--text-muted);
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .footer-info a {
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 600;
         }
 
         .channel-cta {
@@ -348,7 +357,7 @@
             <div class="logo-box">R</div>
             <div class="brand-text">
                 <h1 id="app-title">Rhytho DevStudio</h1>
-                <p id="user-welcome">Developer Utility Suite & TON Ecosystem</p>
+                <p id="user-welcome">TON Blockchain & Telegram Mini App</p>
             </div>
         </div>
         <div class="nav-controls">
@@ -459,9 +468,13 @@
         <button class="btn success" style="width:100%" onclick="copyField('jwt-output')" data-i18n="btn_copy">Copy Payload</button>
     </div>
 
-    <!-- Bottom Official Channel Footer with TON Mention -->
+    <!-- Bottom Official Channel Footer with TON App Verification Link & Ecosystem Mention -->
     <div class="footer-bar">
-        <div class="footer-info" data-i18n="footer_text">TON Ecosystem & Telegram Mini App</div>
+        <div class="footer-info">
+            <span data-i18n="footer_text">Powered by TON Ecosystem & Telegram</span>
+            <!-- Ton.app Required Verification Link -->
+            <a href="https://ton.app/app/rhytho-devstudio" target="_blank" rel="noopener">Find us on Ton.app</a>
+        </div>
         <button class="channel-cta" onclick="openOfficialChannel()">📢 @Rhytho</button>
     </div>
 
@@ -473,11 +486,9 @@
         tg.expand();
         tg.ready();
 
-        // Dictionaries for English & Arabic
         const i18n = {
             en: {
                 welcome: "Welcome, ",
-                default_sub: "Developer Utility Suite & TON Ecosystem",
                 tab_json: "JSON Studio",
                 tab_crypto: "Base64 & URL",
                 tab_hash: "SHA Hash",
@@ -501,7 +512,7 @@
                 btn_gen_pass: "Strong Password",
                 btn_gen_uuid: "Generate UUID v4",
                 btn_decode_jwt: "Decode Token Payload",
-                footer_text: "TON Ecosystem & Telegram Mini App",
+                footer_text: "TON Ecosystem & Telegram Integration",
                 msg_copied: "✅ Copied to clipboard!",
                 msg_cleared: "🗑️ Field cleared",
                 msg_valid_json: "✔ Valid JSON formatted!",
@@ -511,7 +522,6 @@
             },
             ar: {
                 welcome: "أهلاً بك، ",
-                default_sub: "حقيبة أدوات المطورين ونظام TON",
                 tab_json: "منسق JSON",
                 tab_crypto: "تشفير Base64",
                 tab_hash: "بصمة SHA",
@@ -614,7 +624,6 @@
             haptic('light');
         }
 
-        // JSON Studio Logic
         function updateJsonSize() {
             const val = document.getElementById('json-input').value;
             const bytes = new TextEncoder().encode(val).length;
@@ -640,7 +649,7 @@
             const sample = {
                 "app": "Rhytho DevStudio",
                 "version": 2.5,
-                "ecosystem": "TON & Telegram",
+                "ecosystem": "TON Blockchain & Telegram",
                 "features": ["JSON Studio", "SHA Hash", "Base64", "JWT"],
                 "active": true
             };
@@ -649,7 +658,6 @@
             haptic('light');
         }
 
-        // Crypto / Base64 Logic
         function runCrypto(action) {
             const input = document.getElementById('crypto-input').value;
             if (!input) return;
@@ -671,7 +679,6 @@
             }
         }
 
-        // SHA Hash Logic
         async function generateHash(algo) {
             const input = document.getElementById('hash-input').value;
             if (!input) return;
@@ -689,7 +696,6 @@
             }
         }
 
-        // Pass & UUID Logic
         function updatePassLen(val) {
             document.getElementById('pass-len-badge').innerText = val + ' Chars';
             generatePassword();
@@ -705,8 +711,6 @@
                 pass += chars[array[i] % chars.length];
             }
             document.getElementById('pass-output').value = pass;
-            
-            // Update strength bar color
             const fill = document.getElementById('strength-fill');
             fill.style.width = (len / 40) * 100 + '%';
             haptic('light');
@@ -717,7 +721,6 @@
             haptic('light');
         }
 
-        // JWT Decoder Logic
         function decodeJWT() {
             const token = document.getElementById('jwt-input').value.trim();
             if (!token) return;
@@ -742,12 +745,10 @@
             }
         }
 
-        // Initialize App State
         applyTheme(currentTheme);
         applyLang(currentLang);
         generatePassword();
 
-        // Personalized user display if available
         if (tg.initDataUnsafe && tg.initDataUnsafe.user) {
             const user = tg.initDataUnsafe.user;
             document.getElementById('user-welcome').innerText = (i18n[currentLang].welcome || "Welcome, ") + (user.first_name || "Developer");
